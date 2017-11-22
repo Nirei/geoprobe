@@ -190,10 +190,9 @@ class Geolocator:
 						for geohash, coords in locations.items():
 							cache[Geolocator._NETWORKS][ssid][Geolocator._LOCATIONS][geohash] = coords
 					else:
-						print('OOOOOOOOOOOOOOOOOOO SHEEEEEEEEEEEEEEEEEEEEETT')
+						print('No results for SSID: %s' % ssid)
 				except KeyError as e:
-					print(e)
-					print('OOOOOOOOOOOOOOOOOOO FUUUUUUUUUUUUUUUUUUUUUCC')
+					print("You've run out of WiGLE API hits for the time being. Try again sometime later or, if you feel like it you can contribute to the WiGLE DB to gain a few extra hits per day or directly pay for COMMAPI. You can still use this software on cached mode.")
 			finally:
 				result = cache[Geolocator._NETWORKS][ssid][Geolocator._LOCATIONS].values()
 
