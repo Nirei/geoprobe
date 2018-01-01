@@ -12,6 +12,7 @@ from scapy.all import sniff, Dot11ProbeReq, Dot11, Dot11Elt
 import geohash_hilbert as ghh
 from mac_vendors import get_readable_mac
 from pygle import network as pygle_api
+import argparse
 
 #
 # WARNING: PIECE OF UGLY CODE PIECED TOGETHER IN A HURRY FOR EXTRA CREDIT
@@ -102,6 +103,7 @@ disposing of it when not necessary anymore. God has mercy on our souls.
 		return handler
 	
 	def run(self):
+		print("Starting scanner...")
 		self._abort = False
 		hopper = None
 		try:
@@ -239,9 +241,16 @@ class Observer(Thread):
 		else:
 			pass
 
-scanner = Scanner("wlp9s0")
+parser = argparse.ArgumentParser(description="Listen to 802.11 radio and discover nearby client's access points and their possible locations.")
+
+parser.add_argument('-i', '--interface', dest='iface', required=True, help='radio interface for listening')
+parser.add_argument('-t', '--timeout', dest='timeout', default=30, type=int, help='duration of the scan (default: 30s)')
+
+args = parser.parse_args()
+
+scanner = Scanner(args.iface)
 observer = Observer()
 
 scanner.add_observer(observer)
-scanner.scan(50)
+scanner.scan(args.timeout)
 
