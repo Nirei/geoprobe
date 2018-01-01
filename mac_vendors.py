@@ -24088,6 +24088,7 @@ def get_readable_mac(mac):
 	try:
 		mac_prefix = mac[:8].upper()	# aa:bb:cc...
 		mac_suffix = mac[9:]			#       ...dd:ee:ff
-		return '[%s]:%s' % (mac_vendors.prefix[mac_prefix], mac_suffix)
+		return '[%s]:%s' % (prefix[mac_prefix], mac_suffix)
 	except KeyError:
 		return str(mac)
+

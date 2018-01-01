@@ -62,7 +62,7 @@ EV_SCAN_RESULTS = 2		# newly scanned information (EV_SCAN_RESULTS, results)
 
 class Scanner(Thread, Observable):
 	''' Scanner class, handles scanner runs including setting up a monitor and
-disposing of it when not necessary anymore.
+disposing of it when not necessary anymore. God has mercy on our souls.
 
 	get_wireless_interfaces()	- returns available interfaces for monitoring
 	Scanner(iface_name)			- creates a new scanner on the provided interface
@@ -75,7 +75,9 @@ disposing of it when not necessary anymore.
 		return pyw.winterfaces()
 
 	def __init__(self, iface_name):
-		super().__init__()
+		Thread.__init__(self)
+		Observable.__init__(self)
+
 		self._HANDLER = self._make_handler()
 		self._abort = False
 		self._monitor = None
@@ -121,9 +123,9 @@ disposing of it when not necessary anymore.
 				lfilter=Scanner._LFILTER,
 				timeout=self._timeout,
 				stop_filter=self._stop_filter)
-			self._notify_observers((EV_SCAN_OK))
+			self.notify_observers((EV_SCAN_OK,))
 		except pyric.error as e:
-			self._notify_observers((EV_SCAN_FAILED, e))
+			self.notify_observers((EV_SCAN_FAILED, e))
 		finally:
 			if hopper:
 				# stop channel hopping
@@ -152,13 +154,19 @@ class Geolocator:
 	_MAX_AGE = 180 # days of cache validity (6 months)
 	_BPC = 4 # geohashing bits per char (base 16)
 	_PRECISION = 10 # geohashing precision (~20m at _BPC 4)
-	
+	_API_HITS_ERROR_STR = "You've run out of WiGLE API hits for the time being. Try again sometime later or, if you feel like it you can contribute to the WiGLE DB to gain a few extra hits per day or directly pay for COMMAPI. You can still use this software on cached mode."
+
+	# TODO: CODE CLEANUP OF THIS CLASS
+
 	class Outdated(Exception):
 		pass
 	
 	def locate(ssid):
 		with shelve.open(Geolocator._CACHE, writeback=True) as cache:
 			try:
+				if Geolocator._NETWORKS not in cache:
+					cache[Geolocator._NETWORKS] = {}
+			
 				last_update = cache[Geolocator._NETWORKS][ssid][Geolocator._DATE]
 				age = date.today() - last_update
 				if age.days > Geolocator._MAX_AGE:
@@ -172,31 +180,68 @@ class Geolocator:
 					response = pygle_api.search(ssid=ssid)
 					locations = {}
 					for res in response['results']:
+						#print((res['trilat'],res['trilong']))
 						geohash = ghh.encode(res['trilong'],
 							res['trilat'],
 							precision=Geolocator._PRECISION,
 							bits_per_char=Geolocator._BPC)
-						lat, lon = ghh.decode(geohash) # limit precission of stored coords to match geohash
+						lon, lat = ghh.decode(geohash, bits_per_char=Geolocator._BPC) # limit precission of stored coords to match geohash
 						locations[geohash] = lat, lon
 					totalresults = response['totalResults']
 
-					if totalresults:				
-						if Geolocator._NETWORKS not in cache:
-							cache[Geolocator._NETWORKS] = {}
+					if totalresults:
 						if ssid not in cache[Geolocator._NETWORKS]:
 							cache[Geolocator._NETWORKS][ssid] = { Geolocator._LOCATIONS : {} }
-
 						cache[Geolocator._NETWORKS][ssid][Geolocator._DATE] = last_update
 						for geohash, coords in locations.items():
 							cache[Geolocator._NETWORKS][ssid][Geolocator._LOCATIONS][geohash] = coords
 					else:
 						print('No results for SSID: %s' % ssid)
 				except KeyError as e:
-					print("You've run out of WiGLE API hits for the time being. Try again sometime later or, if you feel like it you can contribute to the WiGLE DB to gain a few extra hits per day or directly pay for COMMAPI. You can still use this software on cached mode.")
+					print(_API_HITS_ERROR_STR)
 			finally:
-				result = cache[Geolocator._NETWORKS][ssid][Geolocator._LOCATIONS].values()
+				if ssid in cache[Geolocator._NETWORKS]:
+					result = cache[Geolocator._NETWORKS][ssid][Geolocator._LOCATIONS].values()
+				else: result = None
 
 		return last_update, result
 
+class Observer(Thread):
 
+	_RESULTS = {}
+
+	def __init__(self):
+		Thread.__init__(self)
+	
+	def run(self):
+		sleep(10)
+		for client, networks in Observer._RESULTS.items():
+			print("%s" % get_readable_mac(client))
+			for network in networks:
+				last_update, locations = Geolocator.locate(network)
+				print("\t%s" % network)
+				for loc in locations:
+					print("\t\t%s" % str(loc))
+
+	def notify(self, event):
+		if event[0] == EV_SCAN_RESULTS:
+			client, network = event[1]
+			if network != '':
+				if client not in Observer._RESULTS.keys():
+					Observer._RESULTS[client] = []
+				if network not in Observer._RESULTS[str(client)]:
+					Observer._RESULTS[str(client)].append(network)
+		elif event[0] == EV_SCAN_OK:
+			print("Scan finished")
+			self.start()
+		elif event[0] == EV_SCAN_FAILED:
+			print("Scan failed")
+		else:
+			pass
+
+scanner = Scanner("wlp9s0")
+observer = Observer()
+
+scanner.add_observer(observer)
+scanner.scan(50)
 
