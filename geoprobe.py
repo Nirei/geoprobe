@@ -97,6 +97,7 @@ disposing of it when not necessary anymore. God has mercy on our souls.
 			try:
 				network_ssid = pkt[Dot11Elt].info.decode('utf-8','replace')
 				msg = client_bssid, network_ssid
+				#print(client_bssid, network_ssid)
 				self.notify_observers((EV_SCAN_RESULTS, msg))
 			except UnicodeDecodeError:
 				pass # TODO: log this
@@ -241,7 +242,7 @@ class Observer(Thread):
 		else:
 			pass
 
-parser = argparse.ArgumentParser(description="Listen to 802.11 radio and discover nearby client's access points and their possible locations.")
+parser = argparse.ArgumentParser(description="Listen to 802.11 radio and discover nearby clients' memorized access points and their possible locations.")
 
 parser.add_argument('-i', '--interface', dest='iface', required=True, help='radio interface for listening')
 parser.add_argument('-t', '--timeout', dest='timeout', default=30, type=int, help='duration of the scan (default: 30s)')

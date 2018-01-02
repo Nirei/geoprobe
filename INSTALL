@@ -1,6 +1,16 @@
 Install
 =======
 
-If you haven't, install python3 by whatever means provided by your distro.
-Then, to install launch ./setup.py build. That should install all dependencies.
-Execute with python3 geoprobe.py
+If you haven't, install python3 and pip3 by whatever means provided by your
+distro.
+Then install dependencies with:
+	
+	sudo pip3 install pyric scapy geohash_hilbert pygle
+	
+After that, you'll need to get a WiGLE API token and properly configure it.
+You can do so in https://wigle.net/account after registering for an account.
+Then you will need to copy that token into $PYTHONPATH/pygle/config.py
+- The part provided as "API name" goes in the 'user' variable in the file.
+- The part provided as "API token" goes in the 'key' variable in the file.
+
+That is everything you need to use geoprobe.
