@@ -245,6 +245,8 @@ parser = argparse.ArgumentParser(description="Listen to 802.11 radio and discove
 
 parser.add_argument('-i', '--interface', dest='iface', required=True, help='radio interface for listening')
 parser.add_argument('-t', '--timeout', dest='timeout', default=30, type=int, help='duration of the scan (default: 30s)')
+parser.add_argument('-g', '--disable-geolocation', dest='geolocate', action='store_false', help='only scan for ProbeRequests, do not query for locations')
+parser.add_argument('-c', '--cache-only', dest='connect', action='store_false', help='use only cached results for location, do not query WiGLE API')
 
 args = parser.parse_args()
 
