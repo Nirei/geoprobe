@@ -1,0 +1,6 @@
+Install
+=======
+
+If you haven't, install python3 by whatever means provided by your distro.
+Then, to install launch ./setup.py build. That should install all dependencies.
+Execute with python3 geoprobe.py
