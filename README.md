@@ -2,7 +2,7 @@
 geoprobe is a tool to sniff, collect and geolocate 802.11 ProbeRequests using WiGLE API.
 
 The code is very raw as I had little time to put it together but it does what it needs to do.
-Dependencies, also listed in the install file are the following python3 modules:
+Dependencies, also listed in the install file, are the following python3 modules:
 * pyric
 * scapy
 * geohash_hilbert
@@ -10,7 +10,7 @@ Dependencies, also listed in the install file are the following python3 modules:
 
 Some configuration and a WiGLE account are also needed to use the app's location capabilities.
 
-It's a command line version proof-of-concept of what Zahori (a GUI application that does a better job than this tool does) should do that I'll actually managed to kind of finish before the deadline. Also, GitHub recommends didactit-fortnight as a name for this repository, I think you should know.
+This is a command line version proof-of-concept of what Zahori (a GUI application that does a better job than this tool does) should do that I'll actually managed to kind of finish before the deadline. Also, GitHub recommends didactit-fortnight as a name for this repository, I think you should know.
 
 ## Disclaimer
 This tool is provided for educational purposes only. The author of this tool is not responsible for any misuse. You shall not misuse the tool to gain unauthorized access to otherwise private information. The tool shall only be used to expand knowledge in IT security and never for causing malicious or damaging attacks to any individuals or groups. Use at your own risk.
