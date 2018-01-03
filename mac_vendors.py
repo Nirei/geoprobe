@@ -1,3 +1,20 @@
+# This file is a part of geoprobe - a tool to sniff, collect and
+# geolocate 802.11 ProbeRequests using WiGLE API.
+# Copyright (C) 2018 Jacobo Bouzas Quiroga jacobo.bouzas.quiroga@udc.es
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 prefix={
 'E0:43:DB':'Shenzhen ViewAt Technology Co.,Ltd.',
 '24:05:F5':'Integrated Device Technology (Malaysia) Sdn. Bhd.',
