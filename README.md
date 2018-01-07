@@ -12,6 +12,9 @@ Some configuration and a WiGLE account are also needed to use the app's location
 
 This is a command line version proof-of-concept of what Zahori (a GUI application that does a better job than this tool does) should do that I'll actually managed to kind of finish before the deadline. Also, GitHub recommends didactit-fortnight as a name for this repository, I think you should know.
 
+## Similar software
+* [ProbeKit by brannondorsey](https://github.com/brannondorsey/ProbeKit) is a more sofisticated data collection tool that allows you to gather and visualize this kind of info.
+
 ## Disclaimer
 This tool is provided for educational purposes only. The author of this tool is not responsible for any misuse. You shall not misuse the tool to gain unauthorized access to otherwise private information. The tool shall only be used to expand knowledge in IT security and never for causing malicious or damaging attacks to any individuals or groups. Use at your own risk.
 
